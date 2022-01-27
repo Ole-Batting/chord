@@ -25,3 +25,10 @@ from chord import Guitar
 guitar = Guitar(tuning=['E4','B3','G3','D3','A2','D2']) # drop d tuning instead of standard
 guitar('DM') # will print all voicings for D major
 ```
+
+Store figures example
+```
+from chord import Guitar
+guitar = Guitar()
+guitar('AM7', store_figs=True)
+```
