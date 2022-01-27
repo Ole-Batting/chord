@@ -235,7 +235,9 @@ class Guitar:
         ax.axis('equal')
         ax.set_title(name.replace("M7","maj7").replace("M", ""))
     
-    def chord_print(self, chord, with_inversion=False, manual=False, store_figs=False):
+    def chord_print(self, chord, with_inversion=False, store_figs=False):
+        manual = type(chord) is list
+         
         if not manual:
             chord_list = self.chord_to_list(chord)
             for i, inv in enumerate(self._chord_voicings(chord_list)):
@@ -250,7 +252,7 @@ class Guitar:
             for i, inv in enumerate(self._chord_voicings(chord)):
                 if not i or with_inversion:
                     for c in inv:
-                        self.chord_plot(c)
+                        self.chord_plot(c, '-'.join(chord), store_figs=store_figs)
     
     def fret_sort(self, elem):
         if len(elem[elem>0]>0):
