@@ -269,7 +269,6 @@ class Guitar:
     
     def rough_finger_sort(self, elem):
         return max(len(elem[elem>0]), 3)
-        
 
     def rich_sort(self, positions):
         #sort min fret
@@ -293,6 +292,30 @@ class Guitar:
                 stats['m'] += len(p[p==-1]) # lower is better
                 stats['f'] += len(p[p>0]) # lower is better
                 stats['r'] += self.mute_sort(p) # lower is better
+            else:
+                return False, None
+        return True, stats
+    
+    def tuning_gain(self):
+        chords = [
+            'CM','C#M','DM','D#M','EM','FM','F#M','GM','G#M','AM','A#M','BM',
+            'Cm','Dbm','Dm','Ebm','Em','Fm','Gbm','Gm','Abm','Am','Bbm','Bm',
+        ]
+        weights = np.array([
+            0.6084,0.1638,0.1872,0.2340,0.1638,0.2106,
+            0.0702,0.2808,0.0936,0.1872,0.1170,0.0702,
+            0.2574,0.0693,0.0792,0.0990,0.0693,0.0891,
+            0.0297,0.1188,0.0396,0.0792,0.0495,0.0297,
+        ])
+        stats = {'m': 0, 'f': 0, 'r': 0, 'v': 0}
+        for chord, weight in zip(chords, weights):
+            positions = self.chord_voicings(chord)[0]
+            if positions:
+                p = positions[0]
+                stats['m'] += weight * len(p[p==-1]) # lower is better
+                stats['f'] += weight * len(p[p>0]) # lower is better
+                stats['r'] += weight * self.mute_sort(p) # lower is better
+                stats['v'] += weight * len(positions)
             else:
                 return False, None
         return True, stats
