@@ -36,7 +36,6 @@ def proc(machine, job, n_strings=6):
 
     start_dt = datetime.now()
     for t in range(t_start, t_end):
-            print(t)
             tu = t
 
             strings = []
