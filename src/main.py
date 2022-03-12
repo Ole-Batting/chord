@@ -124,13 +124,8 @@ def proc(machine, job, n_strings=6):
     pickle.dump(payload, open( f'tmp/job/payload_{machine}_{job}.bin', 'wb'))
 
 if __name__ == '__main__':
-    """machine = int(sys.argv[1])
+    machine = int(sys.argv[1])
     m1, m2 = np.meshgrid([machine], range(144))
     args = zip(m1.ravel(),m2.ravel())
-    with Pool(processes=4) as pool:
+    with Pool(processes=20) as pool:
         print(pool.starmap(proc, args))
-    """
-    start = datetime.now()
-    proc(0,0)
-    end = datetime.now()
-    print(end-start)
