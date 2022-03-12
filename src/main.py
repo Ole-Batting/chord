@@ -12,7 +12,7 @@ def proc(machine, job, n_strings=6):
 
     ### Standard tuning ###
     guitar = Guitar(n_strings=n_strings)
-    _,standard_stats = guitar.tuning_stats()
+    _,standard_stats = guitar.tuning_gain()
 
     best_tuning_m = ['E4','B3','G3','D3','A2','E2']
     best_tuning_f = ['E4','B3','G3','D3','A2','E2']
@@ -36,6 +36,7 @@ def proc(machine, job, n_strings=6):
 
     start_dt = datetime.now()
     for t in range(t_start, t_end):
+            print(t)
             tu = t
 
             strings = []
@@ -44,9 +45,9 @@ def proc(machine, job, n_strings=6):
                 tu = tu // 12
                 strings.append(r)
 
-            tuning = [Guitar(n_strings=n_strings).index_to_aspn(s) for s in strings]
+            tuning = [Guitar(n_strings=n_strings).number_to_ipn(s) for s in strings]
 
-            retval, stats = Guitar(tuning=tuning).tuning_stats()
+            retval, stats = Guitar(tuning=tuning).tuning_gain()
 
             if retval:
                 n_tunings += 1
@@ -67,7 +68,7 @@ def proc(machine, job, n_strings=6):
                         'tuning': tuning,
                         'stats': stats,
                     }
-                    pickle.dump(payload, open(f'payload_{t}.bin', 'wb'))
+                    pickle.dump(payload, open(f'tmp/better/payload_{t}.bin', 'wb'))
                     n_tunings += 1
 
 
@@ -121,11 +122,16 @@ def proc(machine, job, n_strings=6):
         'total_duration': end_dt-init_dt,
         'runtime': end_dt-start_dt,
     }
-    pickle.dump(payload, open( f'payload_{machine}_{job}.bin', 'wb'))
+    pickle.dump(payload, open( f'tmp/job/payload_{machine}_{job}.bin', 'wb'))
 
 if __name__ == '__main__':
-    machine = sys.argv[1]
+    """machine = int(sys.argv[1])
     m1, m2 = np.meshgrid([machine], range(144))
     args = zip(m1.ravel(),m2.ravel())
-    with Pool(processes=20) as pool:
+    with Pool(processes=4) as pool:
         print(pool.starmap(proc, args))
+    """
+    start = datetime.now()
+    proc(0,0)
+    end = datetime.now()
+    print(end-start)

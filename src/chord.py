@@ -145,7 +145,7 @@ class Guitar:
         return inversions
     
     def chord_voicings(self, chord):
-        return self.chord_voicings(self.chord_to_list(chord))
+        return self._chord_voicings(self.chord_to_list(chord))
     
     def plot_cross(self, i, radius = 0.3, ax=None):
         x1 = [i - radius * 0.7, i + radius * 0.7]
